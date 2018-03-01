@@ -7,9 +7,21 @@
 */
 
 
+
 //create variables to hold canvas tag
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext("2d");
+var start = false;
+
+// start screen
+function startGame(){
+	var input = prompt("Enter yes to play");
+	if(input === "yes"){
+		start = true;
+	}
+	animate();
+
+}
 
 // create the arrays to hold scoops and cones
 var scoops = [];
@@ -42,6 +54,11 @@ function Component(){
 
 // make the game loop to call
 function animate(){
-	requestAnimationFrame(animate);
+	if(start){
+		console.log("heloo");
+		requestAnimationFrame(animate);
+	}
+	
 }
+
 
