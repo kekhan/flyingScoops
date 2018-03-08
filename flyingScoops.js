@@ -18,13 +18,21 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 var start = false;
 var icecream;
+var clickX = 0;
+var clickY = 0;
+
+// add event listeners
+window.addEventListener('click', function(event){
+	clickX = event.clientX;
+	clickY = event.clientY
+})
 
 // start screen
 function startGame(){
 	//var input = prompt("Enter y to play");
 	//if(input === "y" || input =="Y"){
 	start = true;
-	icecream = new Component(100,100,100,100,'blue',true,false);
+	icecream = new Component(50,canvas.height-100,10,100,'blue',true,false);
 
 	//}
 	animate();
@@ -46,22 +54,19 @@ function Component(x,y,width,height,color,isScoop,isCone){
 	this.color = color;
 	this.width = width;
 	this.height = height;
-	this.dx = 1;
-	this.dy = 1;
-	var posx = 20;
-	var posy = 20;
-	this.angle = Math.atan2(posy-this.y,posx-this.x) * 180 /Math.PI;
 	var rotation = 0;
-
-
 	// make draw function to draw all components
 	this.draw = function(){
 		if(isScoop){
 			/*draw the scoop*/
+			var angle = this.getAngle();
 			
+			//context.clearRect(0,0,canvas.width,canvas.height);
+			context.translate(canvas.width/2, canvas.width/2);
 			context.fillStyle = this.color;
 			context.fillRect(this.x,this.y,this.width,this.height);
-			context.rotate(this.angle);
+			context.rotate(angle);
+
 			
 
 
@@ -69,15 +74,20 @@ function Component(x,y,width,height,color,isScoop,isCone){
 		}
 
 	}
+	this.getAngle = function(){
+		var opposite = clickY - this.y;
+	    var adjacent = clickX - this.x;
+	    var angle = Math.atan2(opposite,adjacent)*180/Math.PI;
+	    return angle;
+	}
 	// make update function to update component's movement
 	this.update = function(){
 		if(isScoop){
 			/* gets position of mouse and posision of scoop*/
-			//this.rotation(this.angle);
-			//rotate(this.angle);
-			//this.rotate(sprite.rotation * Math.PI / 180);
-
+			//console.log(clickX);
 			this.draw();
+			var angle = this.getAngle()
+			console.log("angle is", angle);
 		}
 
 
@@ -99,6 +109,7 @@ function Component(x,y,width,height,color,isScoop,isCone){
 // make the game loop to call
 function animate(){
 	if(start == true){
+		//context.clearRect(0,0,canvas.width,canvas.height);
 		requestAnimationFrame(animate);
 		context.clearRect(0,0,canvas.width,canvas.height);
 		icecream.update();
