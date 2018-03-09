@@ -32,7 +32,7 @@ function startGame(){
 	//var input = prompt("Enter y to play");
 	//if(input === "y" || input =="Y"){
 	start = true;
-	icecream = new Component(50,canvas.height-100,10,100,'blue',true,false);
+	icecream = new Component(50,canvas.height-100,100,100,'blue',true,false);
 
 	//}
 	animate();
@@ -58,26 +58,29 @@ function Component(x,y,width,height,color,isScoop,isCone){
 	// make draw function to draw all components
 	this.draw = function(){
 		if(isScoop){
+			//context.clearRect(0, 0, canvas.width, canvas.height);
+			ctx = context;
+			ctx.save();
+
 			/*draw the scoop*/
 			var angle = this.getAngle();
+			context.save();
+			ctx.translate(canvas.width/2, canvas.width/2);
 			
-			//context.clearRect(0,0,canvas.width,canvas.height);
-			context.translate(canvas.width/2, canvas.width/2);
-			context.fillStyle = this.color;
-			context.fillRect(this.x,this.y,this.width,this.height);
-			context.rotate(angle);
-
+			ctx.rotate(angle);
+			//ctx.translate(-canvas.width/2, -canvas.width/2);
 			
-
-
-
+			ctx.fillStyle = this.color;
+			// having a fixed number for this.x keeps square fixed.
+			ctx.fillRect(20,20,this.width/-2,this.height/-2);
+			ctx.restore();
 		}
 
 	}
 	this.getAngle = function(){
-		var opposite = clickY - this.y;
-	    var adjacent = clickX - this.x;
-	    var angle = Math.atan2(opposite,adjacent)*180/Math.PI;
+		var opposite = clickY - this.y/2;
+	    var adjacent = clickX - this.x/2;
+	    var angle =+ Math.atan2(opposite,adjacent)*180/Math.PI;
 	    return angle;
 	}
 	// make update function to update component's movement
