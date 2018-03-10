@@ -11,7 +11,8 @@
 //create variables to hold canvas tag
 
 //create variables to hold the canvas tag
-
+var image = new Image();
+image.src = "https://media.istockphoto.com/photos/ice-cream-picture-id500545362?k=6&m=500545362&s=612x612&w=0&h=_RBr9mZ5XSXRuKR4OO0qwf2TQHRYwGB1SugXbdZNoMk=";
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext("2d");
 canvas.width = window.innerWidth;
@@ -23,8 +24,8 @@ var clickY = 0;
 
 // add event listeners
 window.addEventListener('click', function(event){
-	clickX = event.clientX;
-	clickY = event.clientY
+	clickX = event.clientX ;
+	clickY = event.clientY;
 })
 
 // start screen
@@ -32,7 +33,7 @@ function startGame(){
 	//var input = prompt("Enter y to play");
 	//if(input === "y" || input =="Y"){
 	start = true;
-	icecream = new Component(50,canvas.height-100,100,100,'blue',true,false);
+	icecream = new Component(image,50,canvas.height-100,100,100,'blue',true,false);
 
 	//}
 	animate();
@@ -47,9 +48,10 @@ var cones =[];
 var Gravity = 9.8;
 
 // make a components function for all the game's objects
-function Component(x,y,width,height,color,isScoop,isCone){
+function Component(img,x,y,width,height,color,isScoop,isCone){
 	// declare variable for this
 	this.x = x;
+	this.img = img;
 	this.y = y;
 	this.color = color;
 	this.width = width;
@@ -64,24 +66,27 @@ function Component(x,y,width,height,color,isScoop,isCone){
 
 			/*draw the scoop*/
 			var angle = this.getAngle();
+			
 			context.save();
-			ctx.translate(canvas.width/2, canvas.width/2);
+
+			// moves the square 
+			ctx.translate(this.x, this.y);
 			
 			ctx.rotate(angle);
 			//ctx.translate(-canvas.width/2, -canvas.width/2);
 			
-			ctx.fillStyle = this.color;
+			//ctx.fillStyle = this.color;
 			// having a fixed number for this.x keeps square fixed.
-			ctx.fillRect(20,20,this.width/-2,this.height/-2);
+			ctx.drawImage(this.img,-30,-30,this.width,this.height);
 			ctx.restore();
 		}
 
 	}
 	this.getAngle = function(){
-		var opposite = clickY - this.y/2;
-	    var adjacent = clickX - this.x/2;
-	    var angle =+ Math.atan2(opposite,adjacent)*180/Math.PI;
-	    return angle;
+		var adjacent = clickX - this.x;
+	    var opposite = clickY - this.y;
+	    var angle = Math.atan2(opposite,adjacent);
+	    return Math.abs(angle);
 	}
 	// make update function to update component's movement
 	this.update = function(){
@@ -111,6 +116,7 @@ function Component(x,y,width,height,color,isScoop,isCone){
 
 // make the game loop to call
 function animate(){
+	console.log(clickX);
 	if(start == true){
 		//context.clearRect(0,0,canvas.width,canvas.height);
 		requestAnimationFrame(animate);
