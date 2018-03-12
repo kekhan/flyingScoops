@@ -27,11 +27,11 @@ var clickX = 0;
 var clickY = 0;
 
 // the sprite object
-var srcWidth = 700;
+var srcWidth = 800;
 var srcHeight = 500;
 var col = 3;
 var row = 2;
-var currentFrame =0;
+var currentFrame = 0;
 var trackleft = 1;
 var trackright =0;
 
@@ -49,17 +49,27 @@ var scoops = [];
 var chocolate = Object.create(spriteObject);
 var strawberry = Object.create(spriteObject);
 var vanilla = Object.create(spriteObject);
+strawberry.x = 510;
+chocolate.x = 510;
+vanilla.x =510;
+
+chocolate.y = 50;
+strawberry.y = 100;
+vanilla.y = canvas.height-158;
 
 chocolate.srcX = (currentFrame+2%col) * chocolate.width;
-chocolate.srcY = trackright* chocolate.height;
+chocolate.srcY = trackright * chocolate.height;
 vanilla.srcX = (currentFrame+1%col)* vanilla.width;
 vanilla.srcY = trackright * vanilla.height;
-strawberry.srcX = (cuurentFrame+0 % col) * strawberry.width;
-strawberry.srcY = spriteObject.trackright * strawberry.height;
+strawberry.srcX = (currentFrame+0 % col) * strawberry.width;
+strawberry.srcY = trackright * strawberry.height;
 scoops.push(chocolate);
 scoops.push(vanilla);
 scoops.push(strawberry);
 console.log(scoops);
+
+var scoopImage = new Image();
+scoopImage.src = urlscoops;
 
 // add event listeners
 window.addEventListener('click', function(event){
@@ -135,6 +145,13 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 
 
 		}
+		for(var i =0; i<scoops.length;i++){
+			var scoop = scoops[i];
+			context.drawImage(scoopImage,scoop.srcX,scoop.srcY,scoop.width,scoop.height,scoop.x,
+				scoop.y,scoop.width/3,scoop.height/3);
+
+
+		}
 
 	}
 	// make collision function to dettect collisions of scoops with cones
@@ -159,6 +176,7 @@ function animate(){
 		context.clearRect(0,0,canvas.width,canvas.height);
 		icecream.update();
 		cone.update();
+		strawberry.y+=1;
 		requestAnimationFrame(animate);
 	}
 	
