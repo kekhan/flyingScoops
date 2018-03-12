@@ -1,9 +1,9 @@
 /*
-    This game will be based on Angry Birds.
-    I want to make a game that applies physics
-    and math to shoot ice cream scoops accross 
-    the screen. The ice cream scoops have to 
-    hit a cone in order to get points. 
+    Ice creams scoops falling on a pile of icecream.
+    there will be three big scops of ice cream at the bottom
+    of the screen. 
+    Need to make sure ice cream is the same color as
+    the pile.
 */
 
 
@@ -12,15 +12,54 @@
 
 //create variables to hold the canvas tag
 var image = new Image();
+var urlscoops = "https://thumbs.dreamstime.com/b/scoops-ice-cream-15853409.jpg";
 image.src = "https://media.istockphoto.com/photos/ice-cream-picture-id500545362?k=6&m=500545362&s=612x612&w=0&h=_RBr9mZ5XSXRuKR4OO0qwf2TQHRYwGB1SugXbdZNoMk=";
+var cone = new Image();
+cone.src = "https://www.webstaurantstore.com/images/products/extra_large/42980/455097.jpg";
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 var start = false;
 var icecream;
+var cone;
 var clickX = 0;
 var clickY = 0;
+
+// the sprite object
+var srcWidth = 700;
+var srcHeight = 500;
+var col = 3;
+var row = 2;
+var currentFrame =0;
+var trackleft = 1;
+var trackright =0;
+
+var spriteObject = {
+	srcX:0,
+	srcY:0,
+	x:0,
+	y:0,
+	width: srcWidth/col,
+	height: srcHeight/row,
+}
+
+// make the array for scoops
+var scoops = [];
+var chocolate = Object.create(spriteObject);
+var strawberry = Object.create(spriteObject);
+var vanilla = Object.create(spriteObject);
+
+chocolate.srcX = (currentFrame+2%col) * chocolate.width;
+chocolate.srcY = trackright* chocolate.height;
+vanilla.srcX = (currentFrame+1%col)* vanilla.width;
+vanilla.srcY = trackright * vanilla.height;
+strawberry.srcX = (cuurentFrame+0 % col) * strawberry.width;
+strawberry.srcY = spriteObject.trackright * strawberry.height;
+scoops.push(chocolate);
+scoops.push(vanilla);
+scoops.push(strawberry);
+console.log(scoops);
 
 // add event listeners
 window.addEventListener('click', function(event){
@@ -34,18 +73,14 @@ function startGame(){
 	//if(input === "y" || input =="Y"){
 	start = true;
 	icecream = new Component(image,50,canvas.height-100,100,100,'blue',true,false);
+	cone = new Component(cone,500, canvas.height-100,100,100,'yellow',false,true);
 
 	//}
 	animate();
 
 }
 
-// create the arrays to hold scoops and cones
-var scoops = [];
-var cones =[];
-
-// create nessary global variables
-var Gravity = 9.8;
+// create the sprites for scoops
 
 // make a components function for all the game's objects
 function Component(img,x,y,width,height,color,isScoop,isCone){
@@ -60,31 +95,29 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 	// make draw function to draw all components
 	this.draw = function(){
 		if(isScoop){
-			//context.clearRect(0, 0, canvas.width, canvas.height);
 			ctx = context;
 			ctx.save();
-
 			/*draw the scoop*/
 			var angle = this.getAngle();
-			
 			context.save();
-
 			// moves the square 
-			ctx.translate(this.x, this.y);
+			ctx.translate(100, 500);
 			
 			ctx.rotate(angle);
-			//ctx.translate(-canvas.width/2, -canvas.width/2);
-			
-			//ctx.fillStyle = this.color;
 			// having a fixed number for this.x keeps square fixed.
 			ctx.drawImage(this.img,-30,-30,this.width,this.height);
 			ctx.restore();
 		}
+		if(isCone){
+			context.drawImage(this.img,this.x,this.y,this.width,this.height);
+		}
 
 	}
+
 	this.getAngle = function(){
 		var adjacent = clickX - this.x;
 	    var opposite = clickY - this.y;
+	    // by removing 180/Math.PI from angle, image rotates correctly
 	    var angle = Math.atan2(opposite,adjacent);
 	    return Math.abs(angle);
 	}
@@ -95,11 +128,13 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 			//console.log(clickX);
 			this.draw();
 			var angle = this.getAngle()
-			console.log("angle is", angle);
+			//console.log("angle is", angle);
 		}
+		if(isCone){
+			this.draw();
 
 
-
+		}
 
 	}
 	// make collision function to dettect collisions of scoops with cones
@@ -114,17 +149,17 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 	}
 }
 
-// make the game loop to call
+console.log(scoops[0]);
+
+// make game loop 
 function animate(){
-	console.log(clickX);
+	//console.log(clickX);
 	if(start == true){
-		//context.clearRect(0,0,canvas.width,canvas.height);
-		requestAnimationFrame(animate);
+		
 		context.clearRect(0,0,canvas.width,canvas.height);
 		icecream.update();
-		//icecream.rotate(Math.atan2(3, -4) * (180 / Math.PI));
+		cone.update();
+		requestAnimationFrame(animate);
 	}
 	
 }
-
-
