@@ -26,6 +26,7 @@ var cone;
 var clickX = 0;
 var clickY = 0;
 
+
 // the sprite object
 var srcWidth = 800;
 var srcHeight = 500;
@@ -38,6 +39,7 @@ var trackright =0;
 var spriteObject = {
 	srcX:0,
 	srcY:0,
+	flavor:"",
 	x:0,
 	y:0,
 	width: srcWidth/col,
@@ -52,6 +54,9 @@ var vanilla = Object.create(spriteObject);
 strawberry.x = 510;
 chocolate.x = 510;
 vanilla.x =510;
+vanilla.flavor = "vanilla";
+chocolate.flavor = "chocolate";
+strawberry.flavor = "strawberry";
 
 chocolate.y = 50;
 strawberry.y = 100;
@@ -83,7 +88,7 @@ function startGame(){
 	//if(input === "y" || input =="Y"){
 	start = true;
 	icecream = new Component(image,50,canvas.height-100,100,100,'blue',true,false);
-	cone = new Component(cone,500, canvas.height-100,100,100,'yellow',false,true);
+	cone = new Component(cone,50, canvas.height-100,100,100,'yellow',false,true);
 
 	//}
 	animate();
@@ -98,10 +103,15 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 	this.x = x;
 	this.img = img;
 	this.y = y;
+	this.dy = 0;
+	this.dx = 0;
+	this.gravity = (-0.07);
+	this.gravitySpeed = 0;
 	this.color = color;
 	this.width = width;
 	this.height = height;
 	var rotation = 0;
+	var num = Math.floor(Math.random() * 3)
 	// make draw function to draw all components
 	this.draw = function(){
 		if(isScoop){
@@ -139,14 +149,22 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 			this.draw();
 			var angle = this.getAngle()
 			//console.log("angle is", angle);
+			
 		}
 		if(isCone){
+			this.gravitySpeed+= this.gravity;
+			this.y += Math.sin(30)*3  - this.gravitySpeed;
+			this.x += 2;
 			this.draw();
 
 
+
 		}
+		//var num =0;
 		for(var i =0; i<scoops.length;i++){
-			var scoop = scoops[i];
+			num = Math.floor(Math.random() * 3)
+			//console.log(num);
+			var scoop = scoops[0];
 			context.drawImage(scoopImage,scoop.srcX,scoop.srcY,scoop.width,scoop.height,scoop.x,
 				scoop.y,scoop.width/3,scoop.height/3);
 
@@ -176,7 +194,7 @@ function animate(){
 		context.clearRect(0,0,canvas.width,canvas.height);
 		icecream.update();
 		cone.update();
-		strawberry.y+=1;
+		//strawberry.y+=1;
 		requestAnimationFrame(animate);
 	}
 	
