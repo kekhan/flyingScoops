@@ -152,9 +152,21 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 			
 		}
 		if(isCone){
-			this.gravitySpeed+= this.gravity;
-			this.y += Math.sin(30)*3  - this.gravitySpeed;
-			this.x += 2;
+			if(this.y+this.height > canvas.height ||this.y<0){
+				this.y = this.y;
+				this.x = this.x;
+				//console.log(this.y);
+				//this.gravitySpeed =0;
+				//this.gravity =0;
+			}
+			else if(this.y+this.height < canvas.height ||this.y>0){
+
+			    this.gravitySpeed+= this.gravity;
+			    this.y += Math.sin(-90)*9 - this.gravitySpeed;
+			    this.x += 2;
+			    console.log(this.y);
+		}
+			
 			this.draw();
 
 
