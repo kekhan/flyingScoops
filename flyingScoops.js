@@ -36,6 +36,7 @@ var currentFrame = 0;
 var trackleft = 1;
 var trackright =0;
 
+
 var spriteObject = {
 	srcX:0,
 	srcY:0,
@@ -44,6 +45,8 @@ var spriteObject = {
 	y:0,
 	width: srcWidth/col,
 	height: srcHeight/row,
+	velocityY:0,
+	velocityX:0,
 }
 
 // make the array for scoops
@@ -52,13 +55,14 @@ var chocolate = Object.create(spriteObject);
 var strawberry = Object.create(spriteObject);
 var vanilla = Object.create(spriteObject);
 strawberry.x = 510;
-chocolate.x = 510;
+chocolate.x = 100;
+chocolate.y = 500;
 vanilla.x =510;
 vanilla.flavor = "vanilla";
 chocolate.flavor = "chocolate";
 strawberry.flavor = "strawberry";
 
-chocolate.y = 50;
+//chocolate.y = 50;
 strawberry.y = 100;
 vanilla.y = canvas.height-158;
 
@@ -71,7 +75,6 @@ strawberry.srcY = trackright * strawberry.height;
 scoops.push(chocolate);
 scoops.push(vanilla);
 scoops.push(strawberry);
-console.log(scoops);
 
 var scoopImage = new Image();
 scoopImage.src = urlscoops;
@@ -152,8 +155,12 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 			
 		}
 		if(isCone){
+			angle = this.getAngle();
+			console.log(angle);
 			if(this.y+this.height > canvas.height ||this.y<0){
 				this.y = this.y;
+				chocolate.y += Math.sin(-angle)*5 - this.gravitySpeed;
+			    chocolate.x +=1;
 				this.x = this.x;
 				//console.log(this.y);
 				//this.gravitySpeed =0;
@@ -162,7 +169,9 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 			else if(this.y+this.height < canvas.height ||this.y>0){
 
 			    this.gravitySpeed+= this.gravity;
-			    this.y += Math.sin(-90)*9 - this.gravitySpeed;
+			    this.y += Math.sin(-angle)*7 - this.gravitySpeed;
+			    chocolate.y += Math.sin(-angle)*5 - this.gravitySpeed;
+			    chocolate.x +=1;
 			    this.x += 2;
 			    console.log(this.y);
 		}
