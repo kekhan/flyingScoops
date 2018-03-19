@@ -91,7 +91,7 @@ function startGame(){
 	//if(input === "y" || input =="Y"){
 	start = true;
 	icecream = new Component(image,50,canvas.height-100,100,100,'blue',true,false);
-	cone = new Component(cone,50, canvas.height-100,100,100,'yellow',false,true);
+	cone = new Component(cone,500, canvas.height-100,100,100,'yellow',false,true);
 
 	//}
 	animate();
@@ -146,51 +146,35 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 	}
 	// make update function to update component's movement
 	this.update = function(){
-		if(isScoop){
-			/* gets position of mouse and posision of scoop*/
-			//console.log(clickX);
-			this.draw();
-			var angle = this.getAngle()
-			//console.log("angle is", angle);
-			
-		}
-		if(isCone){
-			angle = this.getAngle();
-			console.log(angle);
-			if(this.y+this.height > canvas.height ||this.y<0){
-				this.y = this.y;
-				chocolate.y += Math.sin(-angle)*5 - this.gravitySpeed;
-			    chocolate.x +=1;
-				this.x = this.x;
-				//console.log(this.y);
-				//this.gravitySpeed =0;
-				//this.gravity =0;
-			}
-			else if(this.y+this.height < canvas.height ||this.y>0){
-
-			    this.gravitySpeed+= this.gravity;
-			    this.y += Math.sin(-angle)*7 - this.gravitySpeed;
-			    chocolate.y += Math.sin(-angle)*5 - this.gravitySpeed;
-			    chocolate.x +=1;
-			    this.x += 2;
-			    console.log(this.y);
-		}
-			
-			this.draw();
-
-
-
-		}
-		//var num =0;
-		for(var i =0; i<scoops.length;i++){
+		if(isScoop){		
+			// draw the ice cream scoop
+			for(var i =0; i<scoops.length;i++){
 			num = Math.floor(Math.random() * 3)
 			//console.log(num);
 			var scoop = scoops[0];
 			context.drawImage(scoopImage,scoop.srcX,scoop.srcY,scoop.width,scoop.height,scoop.x,
 				scoop.y,scoop.width/3,scoop.height/3);
-
+		}
+			this.draw();
+			var angle = this.getAngle()
+			if(chocolate.y + chocolate.height/3 > canvas.height ){
+			chocolate.y = chocolate.y;
+			chocolate.x = chocolate.x;
 
 		}
+		    else if(chocolate.y + chocolate.height/3 < canvas.height ){
+			this.gravitySpeed += this.gravity;
+			chocolate.y += Math.sin(-angle)*5 - this.gravitySpeed;
+			chocolate.x += 2;
+			console.log(chocolate.y);
+		}
+			
+		}
+		if(isCone){
+			// draw the icecream cone
+			this.draw();
+		}
+
 
 	}
 	// make collision function to dettect collisions of scoops with cones
