@@ -8,11 +8,24 @@
 	 	margin: 0;
 	 	padding: 0;
 	 }
+	 form{
+	 	background-color: orange;
+	 }
+
 	</style>
 </head>
 <body onload = "startGame()" >
+	
 	<canvas id ="canvas">
 	</canvas>
+	<form>
+		Enter speed
+		<input id ="speed" value =0>
+		Enter Angle
+		<input id = "angle" value =0>
+		<button id ="reset">Again</button>
+	</form>
+
 	<script type="text/javascript" src = "flyingScoops.js"></script>
 </body>
 </html>
