@@ -10,6 +10,7 @@
 
 //create variables to hold canvas tag
 
+
 //create variables to hold the canvas tag
 var image = new Image();
 var urlscoops = "https://thumbs.dreamstime.com/b/scoops-ice-cream-15853409.jpg";
@@ -52,29 +53,14 @@ var spriteObject = {
 // make the array for scoops
 var scoops = [];
 var chocolate = Object.create(spriteObject);
-var strawberry = Object.create(spriteObject);
-var vanilla = Object.create(spriteObject);
-strawberry.x = 510;
 chocolate.x = 50;
 chocolate.y = canvas.height-100;
-vanilla.x =510;
-vanilla.flavor = "vanilla";
 chocolate.flavor = "chocolate";
-strawberry.flavor = "strawberry";
-
-//chocolate.y = 50;
-strawberry.y = 100;
-vanilla.y = canvas.height-158;
-
 chocolate.srcX = (currentFrame+2%col) * chocolate.width;
 chocolate.srcY = trackright * chocolate.height;
-vanilla.srcX = (currentFrame+1%col)* vanilla.width;
-vanilla.srcY = trackright * vanilla.height;
-strawberry.srcX = (currentFrame+0 % col) * strawberry.width;
-strawberry.srcY = trackright * strawberry.height;
+
 scoops.push(chocolate);
-scoops.push(vanilla);
-scoops.push(strawberry);
+
 
 var scoopImage = new Image();
 scoopImage.src = urlscoops;
@@ -91,7 +77,7 @@ function startGame(){
 	//if(input === "y" || input =="Y"){
 	start = true;
 	icecream = new Component(image,50,canvas.height-100,100,100,'blue',true,false);
-	cone = new Component(cone,500, canvas.height-100,100,100,'yellow',false,true);
+	cone = new Component(cone,canvas.width-100, canvas.height-100,100,100,'yellow',false,true);
 
 	//}
 	animate();
@@ -113,23 +99,20 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 	this.color = color;
 	this.width = width;
 	this.height = height;
-	var rotation = 0;
-	var num = Math.floor(Math.random() * 3)
+	
+	
 	// make draw function to draw all components
 	this.draw = function(){
+		
 		if(isScoop){
-			ctx = context;
-			ctx.save();
-			/*draw the scoop*/
-			var angle = this.getAngle();
-			context.save();
-			// moves the square 
-			ctx.translate(100, 500);
-			
-			ctx.rotate(angle);
-			// having a fixed number for this.x keeps square fixed.
-			ctx.drawImage(this.img,-30,-30,this.width,this.height);
-			ctx.restore();
+
+			for(var i =0; i<scoops.length;i++){
+			    num = Math.floor(Math.random() * 3)
+			    //console.log(num);
+			    var scoop = scoops[0];
+			    context.drawImage(scoopImage,scoop.srcX,scoop.srcY,scoop.width,scoop.height,scoop.x,
+				    scoop.y,scoop.width/3,scoop.height/3);
+			}
 		}
 		if(isCone){
 			context.drawImage(this.img,this.x,this.y,this.width,this.height);
@@ -137,39 +120,17 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 
 	}
 
-	this.getAngle = function(){
-		var adjacent = clickX - this.x;
-	    var opposite = clickY - this.y;
-	    // by removing 180/Math.PI from angle, image rotates correctly
-	    var angle = Math.atan2(opposite,adjacent);
-	    return Math.abs(angle);
-	}
+	
 	// make update function to update component's movement
 	this.update = function(){
-		if(isScoop){		
-			// draw the ice cream scoop
-			for(var i =0; i<scoops.length;i++){
-			num = Math.floor(Math.random() * 3)
-			//console.log(num);
-			var scoop = scoops[0];
-			context.drawImage(scoopImage,scoop.srcX,scoop.srcY,scoop.width,scoop.height,scoop.x,
-				scoop.y,scoop.width/3,scoop.height/3);
-		}
-			this.draw();
-			var angle = this.getAngle()
-			if(chocolate.y + chocolate.height/3 > canvas.height ){
-			chocolate.y = chocolate.y;
-			chocolate.x = chocolate.x;
+		console.log(chocolate.y);
+		if(isScoop){
+		// draw the ice cream scoop	
+		    this.draw();
+		    this.collision();	
 
 		}
-		    else if(chocolate.y + chocolate.height/3 < canvas.height ){
-			this.gravitySpeed += this.gravity;
-			chocolate.y += Math.sin(-angle)*5 - this.gravitySpeed;
-			chocolate.x += 2;
-			console.log(chocolate.y);
-		}
-			
-		}
+
 		if(isCone){
 			// draw the icecream cone
 			this.draw();
@@ -180,6 +141,19 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 	// make collision function to dettect collisions of scoops with cones
 	this.collision = function() {
 		// body...
+		if(isScoop){
+			//scoop collides with bottom of screen
+			if(chocolate.y + chocolate.height/3 > canvas.height ){
+			    chocolate.y = chocolate.y;
+			    chocolate.x = chocolate.x;
+			}
+		    else if(chocolate.y + chocolate.height/3 < canvas.height ){
+			    this.gravitySpeed += this.gravity;
+			    chocolate.y += Math.sin(60)*2 - this.gravitySpeed;
+			    chocolate.x += 2;
+			    console.log(chocolate.y);
+			}
+		}
 	}
 
 	// make sound function to trigger a sound of icecream scoop being thrown
@@ -188,13 +162,11 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 
 	}
 }
-
-console.log(scoops[0]);
-
-// make game loop 
+// make game loop by using requestAnimationFrame() method
 function animate(){
 	//console.log(clickX);
 	if(start == true){
+
 		
 		context.clearRect(0,0,canvas.width,canvas.height);
 		icecream.update();
