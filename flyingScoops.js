@@ -1,4 +1,4 @@
-/*
+ /*
     Ice creams scoops falling on a pile of icecream.
     there will be three big scops of ice cream at the bottom
     of the screen. 
@@ -94,7 +94,7 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 	this.y = y;
 	this.dy = 0;
 	this.dx = 0;
-	this.gravity = (-0.07);
+	this.gravity = (-0.050);
 	this.gravitySpeed = 0;
 	this.color = color;
 	this.width = width;
@@ -128,38 +128,12 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 		//console.log(isScoop);
 		if(isScoop){
 		// draw the ice cream scoop	
-
-		    if(clickX >= canvas.width/5){
-		    	this.speed = 8;
-		    }	
-		    else if(clickX >= canvas.width/10){
-		    	this.speed = 5;
-
-		    }
-		    else if(clickX >= canvas.width/20){
-		    	this.speed = 3;
-		    }
-		    else if(clickX >= canvas.width/50){
-		    	this.speed = 1;
-		    }
-		    else {
-		    	this.speed = 0;
-		    }
-		    if (clickY >= canvas.height/3) {
-		    	this.angle = 30;
-
-		    }
-		    else if(clickY >= canvas.height/2){
-		    	this.angle = 60;
-		    }
-		    else if(clickY >= canvas.height){
-		    	this.angle = 90;
-		    }
 		    
 		    
 
 		    this.draw();
 		    this.collision();
+		    
 		    	
 
 		}
@@ -167,6 +141,10 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 		if(isCone){
 			// draw the icecream cone
 			this.draw();
+			 
+			console.log(cone.height+cone.y, chocolate.y + chocolate.height);
+		
+			
 		}
 
 
@@ -176,17 +154,26 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 		// body...
 		if(isScoop){
 			//scoop collides with bottom of screen
+			if( (chocolate.y + chocolate.height) > cone.y)
+		    {
+				chocolate.y=chocolate.y;
+		        chocolate.x=chocolate.x;
+
+			}
 			if(chocolate.y + chocolate.height/3 < canvas.height ){
 			    this.gravitySpeed += this.gravity;
-			    chocolate.y += Math.sin(-this.angle)*this.speed - this.gravitySpeed;
+			    chocolate.y += Math.sin(200)*9 - this.gravitySpeed;
 			    chocolate.x += 2;
 			    console.log("xxx",this.speed);
 			    console.log("yyy",this.angle);
 			}
-			else if(chocolate.y + chocolate.height/3 > canvas.height ){
+			else if(chocolate.y + chocolate.height > canvas.height ){
 			    chocolate.y = chocolate.y;
 			    chocolate.x = chocolate.x;
 			}
+			
+
+			
 
 		    
 		}
