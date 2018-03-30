@@ -132,7 +132,20 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 		    
 
 		    this.draw();
-		    this.collision();
+		    //scoop collides with bottom of screen
+		   if(chocolate.y + chocolate.height/3 < canvas.height ){
+			    this.gravitySpeed += this.gravity;
+			    chocolate.y += Math.sin(200)*9 - this.gravitySpeed;
+			    chocolate.x += 2;
+			    console.log("xxx",this.speed);
+			    console.log("yyy",this.angle);
+			}
+	
+		
+			else if(chocolate.y + chocolate.height > canvas.height ){
+			    chocolate.y = chocolate.y;
+			    chocolate.x = chocolate.x;
+			}
 		    
 		    	
 
@@ -141,8 +154,9 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 		if(isCone){
 			// draw the icecream cone
 			this.draw();
+			
 			 
-			console.log(cone.height+cone.y, chocolate.y + chocolate.height);
+			console.log(chocolate.x, chocolate.y);
 		
 			
 		}
@@ -152,31 +166,16 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 	// make collision function to dettect collisions of scoops with cones
 	this.collision = function() {
 		// body...
-		if(isScoop){
-			//scoop collides with bottom of screen
-			if( (chocolate.y + chocolate.height) > cone.y)
-		    {
-				chocolate.y=chocolate.y;
-		        chocolate.x=chocolate.x;
-
-			}
-			if(chocolate.y + chocolate.height/3 < canvas.height ){
-			    this.gravitySpeed += this.gravity;
-			    chocolate.y += Math.sin(200)*9 - this.gravitySpeed;
-			    chocolate.x += 2;
-			    console.log("xxx",this.speed);
-			    console.log("yyy",this.angle);
-			}
-			else if(chocolate.y + chocolate.height > canvas.height ){
-			    chocolate.y = chocolate.y;
-			    chocolate.x = chocolate.x;
-			}
-			
-
-			
-
-		    
+	
+		if((this.x) < (chocolate.x + chocolate.width/3) && (this.x) > chocolate.x/3 &&
+            (this.y) < chocolate.y + chocolate.height/3 && (this.y) > chocolate.y){
+               chocolate.y = chocolate.y-100;//canvas.width-cone.width;
+               chocolate.x = chocolate.x-100;//canvas.height-cone.height;
+               //this.gravity = 0;
+               //this.gravitySpeed=0;
+ 
 		}
+		//console.log("fun", chocolate.y)
 	}
 
 	// make sound function to trigger a sound of icecream scoop being thrown
@@ -194,7 +193,7 @@ function animate(){
 		context.clearRect(0,0,canvas.width,canvas.height);
 		icecream.update();
 		cone.update();
-		//strawberry.y+=1;
+		cone.collision();
 		requestAnimationFrame(animate);
 	}
 	
