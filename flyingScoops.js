@@ -1,9 +1,12 @@
  /*
-    Ice creams scoops falling on a pile of icecream.
-    there will be three big scops of ice cream at the bottom
-    of the screen. 
-    Need to make sure ice cream is the same color as
-    the pile.
+ Simulating trajectile by using an ice creem scoop and a cone. If the icecream scoop 
+ falls in cone than it should freeze on top of the cone. Otherwise ice cream scoop should 
+ fall on bottom of screen.
+ values of kinematic variables
+  - gravity = -0.050
+  - initial y velocity = 10*sin(180)
+  - acceseration in the y direction is the gravity
+  - initial x velocity = 3.4*cos(180)
 */
 
 
@@ -136,7 +139,7 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 		   if(chocolate.y + chocolate.height/3 < canvas.height ){
 			    this.gravitySpeed += this.gravity;
 			    chocolate.y += Math.sin(180)*10 - this.gravitySpeed;
-			    chocolate.x += 2;
+			    chocolate.x += -Math.cos(180)*3.4;
 			    console.log("xxx",this.speed);
 			    console.log("yyy",this.angle);
 			}
