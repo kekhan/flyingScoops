@@ -77,7 +77,7 @@ function startGame(){
 	//if(input === "y" || input =="Y"){
 	start = true;
 	icecream = new Component(image,50,canvas.height-100,100,100,'blue',true,false);
-	cone = new Component(cone,canvas.width-100, canvas.height-100,100,100,'yellow',false,true);
+	cone = new Component(cone,canvas.width-500, canvas.height-100,100,100,'yellow',false,true);
 
 	//}
 	animate();
@@ -135,7 +135,7 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 		    //scoop collides with bottom of screen
 		   if(chocolate.y + chocolate.height/3 < canvas.height ){
 			    this.gravitySpeed += this.gravity;
-			    chocolate.y += Math.sin(200)*9 - this.gravitySpeed;
+			    chocolate.y += Math.sin(180)*10 - this.gravitySpeed;
 			    chocolate.x += 2;
 			    console.log("xxx",this.speed);
 			    console.log("yyy",this.angle);
@@ -154,6 +154,7 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 		if(isCone){
 			// draw the icecream cone
 			this.draw();
+			this.collision();
 			
 			 
 			console.log(chocolate.x, chocolate.y);
@@ -167,10 +168,14 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 	this.collision = function() {
 		// body...
 	
-		if((this.x) < (chocolate.x + chocolate.width/3) && (this.x) > chocolate.x/3 &&
-            (this.y) < chocolate.y + chocolate.height/3 && (this.y) > chocolate.y){
-               chocolate.y = chocolate.y-100;//canvas.width-cone.width;
-               chocolate.x = chocolate.x-100;//canvas.height-cone.height;
+		if((chocolate.x) < (this.x + this.width) && (chocolate.x) > this.x &&
+            (chocolate.y) < this.y + this.height && (chocolate.y) > this.y){
+               chocolate.y = cone.y-67;//canvas.width-cone.width;
+               chocolate.x = cone.x;//canvas.height-cone.height;
+               var scoop = scoops[0];
+			    context.drawImage(scoopImage,scoop.srcX,scoop.srcY,scoop.width,scoop.height,scoop.x,
+				    scoop.y,scoop.width/3,scoop.height/3);
+               start = false;
                //this.gravity = 0;
                //this.gravitySpeed=0;
  
