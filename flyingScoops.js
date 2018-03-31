@@ -72,6 +72,7 @@ scoopImage.src = urlscoops;
 window.addEventListener('click', function(event){
 	clickX = event.clientX ;
 	clickY = event.clientY;
+	start = true;
 })
 
 // start screen
@@ -202,6 +203,8 @@ function animate(){
 		icecream.update();
 		cone.update();
 		cone.collision();
+		context.font=  "30px Arial";
+		context.fillText("Flying Scoop",50 ,50)
 		requestAnimationFrame(animate);
 	}
 	
