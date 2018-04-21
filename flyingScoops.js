@@ -29,6 +29,8 @@ var icecream;
 var cone;
 var clickX = 0;
 var clickY = 0;
+var angle=0;
+var speed=0;
 
 
 // the sprite object
@@ -75,6 +77,17 @@ window.addEventListener('click', function(event){
 	start = true;
 })
 
+// get input 
+function getInput(){
+	angle = document.getElementById('angle').value;
+	angle = Number(angle);
+	speed = document.getElementById('speed').value;
+	speed = Number(speed);
+	console.log(angle,speed);
+	//start = true;
+	startGame();
+
+}
 // start screen
 function startGame(){
 	//var input = prompt("Enter y to play");
@@ -82,10 +95,7 @@ function startGame(){
 	start = true;
 	icecream = new Component(image,50,canvas.height-100,100,100,'blue',true,false);
 	cone = new Component(cone,canvas.width-500, canvas.height-100,100,100,'yellow',false,true);
-
-	//}
 	animate();
-
 }
 
 // create the sprites for scoops
@@ -103,12 +113,11 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 	this.color = color;
 	this.width = width;
 	this.height = height;
-	this.angle = 0;
-	this.speed = 0;
 	
 	
 	// make draw function to draw all components
 	this.draw = function(){
+		
 		
 		if(isScoop){
 
@@ -121,10 +130,12 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 			}
 		}
 		if(isCone){
-			context.drawImage(this.img,this.x,this.y,this.width,this.height);
-		}
+		
+		    context.drawImage(this.img,this.x,this.y,this.width,this.height);
 
-	}
+		}
+	
+}
 
 	
 	// make update function to update component's movement
@@ -139,10 +150,10 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 		    //scoop collides with bottom of screen
 		   if(chocolate.y + chocolate.height/3 < canvas.height ){
 			    this.gravitySpeed += this.gravity;
-			    chocolate.y += Math.sin(180)*10 - this.gravitySpeed;
-			    chocolate.x += -Math.cos(180)*3.4;
-			    console.log("xxx",this.speed);
-			    console.log("yyy",this.angle);
+
+			    chocolate.y += Math.sin(angle)*speed - this.gravitySpeed;
+			    console.log(chocolate.y);
+			    chocolate.x += -Math.cos(angle)*3.4;
 			}
 	
 		
@@ -159,9 +170,6 @@ function Component(img,x,y,width,height,color,isScoop,isCone){
 			// draw the icecream cone
 			this.draw();
 			this.collision();
-			
-			 
-			console.log(chocolate.x, chocolate.y);
 		
 			
 		}
